@@ -6,7 +6,7 @@
 /*   By: jnannie <jnannie@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/03 13:44:09 by jnannie           #+#    #+#             */
-/*   Updated: 2020/10/10 15:30:02 by jnannie          ###   ########.fr       */
+/*   Updated: 2020/10/10 15:46:40 by jnannie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,6 @@ int			ft_atoi(char **format)
 	{
 		res = res * 10 + (**format - 48);
 		(*format)++;
-	}
-	return (res);
-}
-
-char		*ft_strdup(char *str)
-{
-	int		i;
-	char	*res;
-
-	res = malloc(ft_strlen(str) + 1);
-	i = 0;
-	while (str[i])
-	{
-		res[i] = str[i];
-		i++;
 	}
 	return (res);
 }
@@ -171,7 +156,6 @@ void		print_by_format(char **format, va_list args)
 	else if (**format == 's')
 	{
 		ch_res = va_arg(args, char *);
-		ch_res = ft_strdup(ch_res);
 		print_string(ch_res);
 		(*format)++;
 	}
@@ -212,5 +196,8 @@ int			main(void)
 	printf("%15.12d | %15.12x | %d | %x\n", 100, 100, -15, -15);
 	ft_printf("%15.12s | %15.2s | %.2s | %s\n", "100", "100", "100", "");
 	printf("%15.12s | %15.2s | %.2s | %s\n", "100", "100", "100", "");
+	ft_printf("%10.2s\n", "toto");
+	ft_printf("Magic %s is %5d", "number", 42);
+	ft_printf("Hexadecimal for %d is %x\n", 42, 42);
 	return (0);
 }
