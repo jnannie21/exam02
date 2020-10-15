@@ -6,7 +6,7 @@
 /*   By: jnannie <jnannie@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/03 13:44:09 by jnannie           #+#    #+#             */
-/*   Updated: 2020/10/10 15:46:40 by jnannie          ###   ########.fr       */
+/*   Updated: 2020/10/15 11:43:54 by jnannie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ int			ft_atoi(char **format)
 
 void		print_int_base(long int_res, int base)
 {
-	if (int_res < 0)
-		int_res = -int_res;
 	if (int_res < base)
 		write(1, digits + int_res, 1);
 	else
@@ -80,6 +78,11 @@ void		print_int_format(long int_res, int base)
 	int		len;
 	int		i;
 
+	if (int_res < 0)
+	{
+		neg = 1;
+		int_res *= (-1);
+	}
 	len = count_digits(int_res, base);
 	i = 0;
 	if (precision > len)
@@ -120,9 +123,8 @@ void		print_string(char *ch_res)
 		while (i++ < width - len)
 			write(1, " ", 1);
 	}
-	i = 0;
 	while (len--)
-		write(1, ch_res + i++, 1);
+		write(1, ch_res++, 1);
 }
 
 void		print_by_format(char **format, va_list args)
@@ -142,8 +144,6 @@ void		print_by_format(char **format, va_list args)
 	if (**format == 'd')
 	{
 		int_res = va_arg(args, int);
-		if (int_res < 0)
-			neg = 1;
 		print_int_format(int_res, 10);
 		(*format)++;
 	}
@@ -192,12 +192,14 @@ int			ft_printf(const char *format, ... )
 
 int			main(void)
 {
-	ft_printf("%15.12d | %15.12x | %d | %x\n", 100, 100, -15, -15);
-	printf("%15.12d | %15.12x | %d | %x\n", 100, 100, -15, -15);
+	ft_printf("%15.12d | %15.12x | %0.0d | %x\n", 100, 100, -15, -15);
+	printf("%15.12d | %15.12x | %0.0d | %x\n", 100, 100, -15, -15);
 	ft_printf("%15.12s | %15.2s | %.2s | %s\n", "100", "100", "100", "");
 	printf("%15.12s | %15.2s | %.2s | %s\n", "100", "100", "100", "");
 	ft_printf("%10.2s\n", "toto");
 	ft_printf("Magic %s is %5d", "number", 42);
 	ft_printf("Hexadecimal for %d is %x\n", 42, 42);
+	printf("Magic %s is %5d", "number", 42);
+	printf("Hexadecimal for %d is %x\n", 42, 42);
 	return (0);
 }
