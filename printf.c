@@ -6,7 +6,7 @@
 /*   By: jnannie <jnannie@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/03 13:44:09 by jnannie           #+#    #+#             */
-/*   Updated: 2020/10/15 11:43:54 by jnannie          ###   ########.fr       */
+/*   Updated: 2020/10/15 20:19:11 by jnannie          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int			precision = 0;
 int			is_precision = 0;
 int			neg = 0;
 char		digits[] = "0123456789abcdef";
+int			output_len = 0;
 
 int		count_digits(long num, int base)
 {
@@ -65,7 +66,10 @@ int			ft_atoi(char **format)
 void		print_int_base(long int_res, int base)
 {
 	if (int_res < base)
+	{
 		write(1, digits + int_res, 1);
+		output_len++;
+	}
 	else
 	{
 		print_int_base(int_res / base, base);
@@ -90,23 +94,42 @@ void		print_int_format(long int_res, int base)
 		if (width > precision + neg)
 		{
 			while (i++ < width - precision - neg)
+			{
 				write(1, " ", 1);
+				output_len++;
+			}
+				
 		}
 		if (neg)
+		{
 			write(1, "-", 1);
+			output_len++;
+		}
 		i = 0;
 		while (i++ < precision - len)
+		{
 			write(1, "0", 1);
+			output_len++;
+		}
 	}
 	else if (width > len + neg)
 	{
 		while (i++ < width - len - neg)
+		{
 			write(1, " ", 1);
+			output_len++;
+		}
 		if (neg)
+		{
 			write(1, "-", 1);
+			output_len++;
+		}
 	}
 	else if (neg)
+	{
 		write(1, "-", 1);
+		output_len++;
+	}
 	print_int_base(int_res, base);
 }
 
@@ -121,10 +144,16 @@ void		print_string(char *ch_res)
 	if (width > len)
 	{
 		while (i++ < width - len)
+		{
 			write(1, " ", 1);
+			output_len++;
+		}
 	}
 	while (len--)
+	{
 		write(1, ch_res++, 1);
+		output_len++;
+	}
 }
 
 void		print_by_format(char **format, va_list args)
@@ -167,6 +196,7 @@ void		print_to_percent(char **format)
 	{
 		write(1, *format, 1);
 		(*format)++;
+		output_len++;
 	}
 }
 
@@ -175,6 +205,7 @@ int			ft_printf(const char *format, ... )
 	va_list			args;
 
 	va_start(args, format);
+	output_len = 0;
 	while (*format)
 	{
 		width = 0;
@@ -187,19 +218,7 @@ int			ft_printf(const char *format, ... )
 			print_to_percent((char **)&format);
 	}
 	va_end(args);
-	return (0);
+	return (output_len);
 }
 
-int			main(void)
-{
-	ft_printf("%15.12d | %15.12x | %0.0d | %x\n", 100, 100, -15, -15);
-	printf("%15.12d | %15.12x | %0.0d | %x\n", 100, 100, -15, -15);
-	ft_printf("%15.12s | %15.2s | %.2s | %s\n", "100", "100", "100", "");
-	printf("%15.12s | %15.2s | %.2s | %s\n", "100", "100", "100", "");
-	ft_printf("%10.2s\n", "toto");
-	ft_printf("Magic %s is %5d", "number", 42);
-	ft_printf("Hexadecimal for %d is %x\n", 42, 42);
-	printf("Magic %s is %5d", "number", 42);
-	printf("Hexadecimal for %d is %x\n", 42, 42);
-	return (0);
-}
+
